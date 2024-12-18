@@ -2,76 +2,59 @@ f = open("receipes.txt")
 print(type(f))
 data = f.read()
 print(data, type(data))
-file_work = "receipes.txt"
+f.close()
 
-for line in file_work:
-    dish_name = line.strip()
-    servings = int(file_work.line().strip())
+def create_dict_from_file(file_name):
+    # """"""Функция чтения файла + создание словаря нужного формата""""""
+    cook_dict = {}
+    with open(file_name, encoding='utf8') as file_work:
+        for line in file_work:
+            dish_name = ''
+            print(line.lower().strip())
+            counter = int(file_work.readline())
+            list_of_ingridient = []
+            for i in range(counter):
+                temp_dict = {}
+                print(file_work.readline().lower())
+                list_of_ingridient.append(temp_dict)
+            cook_dict[dish_name] = list_of_ingridient
+            file_work.readline()
+    return cook_dict
 
-lines_count = len(data.strip().split('\n'))
-print(f'Общее количество строк: {lines_count}')
+#Задача 2
+def get_shop_list_by_dishes(dishes, person_count):
+    cook_book = {}
+    shop_list = {}
+    for dish in dishes:
+        if dish in cook_book:
+            for ingridient, info in cook_book[dish].items():
+                total_quantity = info["quantity"] * person_count
+                if ingridient in shop_list:
+                    shop_list[ingridient]["quantity"] += total_quantity
+                else:
+                    shop_list[ingredient] = {
+                        'measure': info['measure'],
+                        'quantity': total_quantity
+                    }
+    
+    return shop_list
+result = get_shop_list_by_dishes
+print(result)
 
-list_of_ingredients = [
-    {"name": "Яйцо", "quantity": 2, "unit": "шт"},
-    {"name": "Молоко", "quantity": 100, "unit": "мл"},
-    {"name": "Помидор", "quantity": 2, "unit": "шт"},
-    {"name": "Утка", "quantity": 1, "unit": "шт"},
-    {"name": "Вода", "quantity": 2, "unit": "л"},
-    {"name": "Мед", "quantity": 3, "unit": "ст.л"},
-    {"name": "Соевый соус", "quantity": 60, "unit": "мл"},
-    {"name": "Картофель", "quantity": 1, "unit": "кг"},
-    {"name": "Чеснок", "quantity": 3, "unit": "зубч"},
-    {"name": "Сыр гауда", "quantity": 100, "unit": "г"},
-    {"name": "Говядина", "quantity": 500, "unit": "г"},
-    {"name": "Перец сладкий", "quantity": 1, "unit": "шт"},
-    {"name": "Лаваш", "quantity": 2, "unit": "шт"},
-    {"name": "Винный уксус", "quantity": 1, "unit": "ст.л"},
-] #создание временного списка путем создания отдельного словаря для каждого блюда с перечислением ингридиентов всех ингридиентов.
+#Задача 3
+import os
 
-#<наш счетчик counter использовать range>:
-for counter in range(len(list_of_ingredients)):
-    ingridient = list_of_ingredients[counter]
-    print(f"{counter + 1}. {"ingredient"['name']} - {"ingredient"['quantity']} {"ingredient"['unit']}")
+def combine_files(file_list, output_file):
+    file_info = []
+    for file in file_list:
+        with open(file, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+            line_count = len(lines)
+            file_info.append((file, line_count, lines))
+            file_info.sort(key=lambda x: x[1])
 
-temp_dict = {
-    "Омлет": {
-        "количество порций": 3,
-        "ингредиенты": {
-            "Яйцо": {"количество": 2, "единица": "шт"},
-            "Молоко": {"количество": 100, "единица": "мл"},
-            "Помидор": {"количество": 2, "единица": "шт"},
-        },
-    },
-    "Утка по-пекински": {
-        "количество порций": 4,
-        "ингредиенты": {
-            "Утка": {"количество": 1, "единица": "шт"},
-            "Вода": {"количество": 2, "единица": "л"},
-            "Мед": {"количество": 3, "единица": "ст.л"},
-            "Соевый соус": {"количество": 60, "единица": "мл"},
-        },
-    },
-    "Запеченный картофель": {
-        "количество порций": 3,
-        "ингредиенты": {
-            "Картофель": {"количество": 1, "единица": "кг"},
-            "Чеснок": {"количество": 3, "единица": "зубч"},
-            "Сыр гауда": {"количество": 100, "единица": "г"},
-        },
-    },
-    "Фахитос": {
-        "количество порций": 5,
-        "ингредиенты": {
-            "Говядина": {"количество": 500, "единица": "г"},
-            "Перец сладкий": {"количество": 1, "единица": "шт"},
-            "Лаваш": {"количество": 2, "единица": "шт"},
-            "Винный уксус": {"количество": 1, "единица": "ст.л"},
-            "Помидор": {"количество": 2, "единица": "шт"},
-        },
-    },
-}#наименования блюд в виде ключей, а количество порций и ингридиентов в виде значений.
-ingridient = file_work.readline()
-recipes_list = [] #пустой список, в который добавляем словарь методом .append
-recipes_list.append(temp_dict)
-#<записываем в словарь cook_dict наш рецепт> ?
-file_work.readline()
+with open('output.txt', 'w', encoding='utf-8') as outfile:
+    for f in ['file_1.txt', 'file_2.txt','file_3.txt']:
+        with open(f, 'r') as infile:
+            for line in infile:
+                outfile.write(line)
